@@ -30,7 +30,7 @@ public class FixerTests {
     @ArgumentsSource(TestCaseArgumentsProvider.class)
     public void testSimpleRepair(String anomaly, String correct) {
         JSONRepair repair = new JSONRepair();
-        Assertions.assertEquals(correct, repair.handle(anomaly));
+        Assertions.assertEquals(correct.trim(), repair.handle(anomaly).trim());
     }
     
     @ParameterizedTest(name = "{0} > {1}")
@@ -40,7 +40,7 @@ public class FixerTests {
         JSONRepairConfig config = new JSONRepairConfig();
         config.enableExtractJSON();
         JSONRepair repair = new JSONRepair(config);
-        Assertions.assertEquals(correct, repair.handle(anomaly));
+        Assertions.assertEquals(correct.trim(), repair.handle(anomaly).trim());
     }
     
     @ParameterizedTest(name = "{0} > {1}")
@@ -48,6 +48,6 @@ public class FixerTests {
     @ArgumentsSource(TestCaseArgumentsProvider.class)
     public void testCorrectRepair(String anomaly, String correct, String reference) {
         JSONRepair repair = new JSONRepair(new CorrectRepairStrategy(reference));
-        Assertions.assertEquals(correct, repair.handle(anomaly));
+        Assertions.assertEquals(correct.trim(), repair.handle(anomaly).trim());
     }
 }

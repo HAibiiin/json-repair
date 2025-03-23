@@ -152,10 +152,8 @@ public class SimpleRepairStrategy implements RepairStrategy {
                         if (errorNode != null && KeySymbol.COLON.val().equalsIgnoreCase(errorNode.getText())) {
                             return json.replaceFirst(node.key(), node.key().substring(0, node.key().length() - 1) + "\",");
                         }
-                        throw new UnableHandleException();
-                    } else {
-                        return json.replaceFirst(node.key(), node.key() + "\"");
                     }
+                    return json.replaceFirst(node.key(), node.key() + "\"");
                 }),
         OPEN_QUOTATION_MARK(
                 (node, beRepairParseList) -> node.expectingToken() && node.key().endsWith("\""),

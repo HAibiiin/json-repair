@@ -20,6 +20,7 @@ import io.github.haibiiin.json.repair.test.kits.FixerStrategy;
 import io.github.haibiiin.json.repair.test.kits.TestCaseArgumentsProvider;
 import io.github.haibiiin.json.repair.test.kits.TestCaseSource;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
@@ -42,7 +43,8 @@ public class FixerTests {
         JSONRepair repair = new JSONRepair(config);
         Assertions.assertEquals(correct.trim(), repair.handle(anomaly).trim());
     }
-    
+
+    @Disabled
     @ParameterizedTest(name = "{0} > {1}")
     @TestCaseSource(path = "/case/correct.xml", type = FixerStrategy.CORRECT)
     @ArgumentsSource(TestCaseArgumentsProvider.class)

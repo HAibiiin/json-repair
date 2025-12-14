@@ -18,40 +18,43 @@ package io.github.haibiiin.json.repair;
 import java.util.Properties;
 
 public class JSONRepairConfig {
-    
+
     private final Properties properties;
-    
+
     public JSONRepairConfig() {
         this.properties = new Properties();
         this.properties.put(Property.MAX_TRY_TIMES.name(), 20);
         this.properties.put(Property.EXTRACT_JSON.name(), false);
         this.properties.put(Property.LINE_FEED.name(), true);
     }
-    
+
     public int maxTryTimes() {
         return (int) this.properties.getOrDefault(Property.MAX_TRY_TIMES.name(), 20);
     }
-    
-    public void maxTryTimes(int value) {
+
+    public JSONRepairConfig maxTryTimes(int value) {
         this.properties.put(Property.MAX_TRY_TIMES.name(), value);
+        return this;
     }
-    
+
     public boolean extractJSON() {
         return (boolean) this.properties.getOrDefault(Property.EXTRACT_JSON.name(), false);
     }
-    
-    public void enableExtractJSON() {
+
+    public JSONRepairConfig enableExtractJSON() {
         this.properties.put(Property.EXTRACT_JSON.name(), true);
+        return this;
     }
-    
+
     public boolean lineFeed() {
         return (boolean) this.properties.getOrDefault(Property.LINE_FEED.name(), true);
     }
-    
-    public void removeLineFeed() {
+
+    public JSONRepairConfig removeLineFeed() {
         this.properties.put(Property.LINE_FEED.name(), false);
+        return this;
     }
-    
+
     public enum Property {
         EXTRACT_JSON,
         MAX_TRY_TIMES,

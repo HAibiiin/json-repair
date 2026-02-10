@@ -21,6 +21,10 @@
         <correct>{"f":"v"}</correct>
     </test-case>
     <test-case>
+        <anomaly>{"f": ""v"}</anomaly>
+        <correct>{"f": "v"}</correct>
+    </test-case>
+    <test-case>
         <anomaly>{"f":"v", "f2":"v2"</anomaly>
         <correct>{"f":"v", "f2":"v2"}</correct>
     </test-case>

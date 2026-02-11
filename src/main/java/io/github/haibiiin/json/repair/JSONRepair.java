@@ -71,6 +71,8 @@ public class JSONRepair {
         }
         // Fix redundant leading quote in JSON keys. This pattern matches empty string followed by key name: ""key" and replaces it with "key"
         beRepairJSON = beRepairJSON.replaceAll("\"\"([^\",:{}\\[\\]\\s]+)\"", "\"$1\"");
+        // Remove non-JSON characters (e.g. parentheses) appearing after structural tokens
+        beRepairJSON = beRepairJSON.replaceAll("(?<=[]},])\\s*[^\\s\\w\"{}\\[\\]:,.\\-]+\\s*(?=[]}]|$)", "");
         
         CharStream charStream = CharStreams.fromString(beRepairJSON);
         JSONLexer lexer = new JSONLexer(charStream);

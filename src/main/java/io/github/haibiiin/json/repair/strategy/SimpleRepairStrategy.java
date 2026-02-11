@@ -92,14 +92,18 @@ public class SimpleRepairStrategy implements RepairStrategy {
             return node.expectingList().size() == 7;
         }
         
-        public boolean expectingEOF() {
-            return KeySymbol.COLON.val().equalsIgnoreCase(node.key())
+        public boolean expectingEOF(KeySymbol symbol) {
+            return symbol.val().equalsIgnoreCase(node.key())
                     && node.expectingList().size() == 1
                     && node.expectingList().contains(KeySymbol.EOF.val());
         }
         
         public boolean expectingToken() {
             return node.expectingList().size() == 1 && node.expectingList().contains(KeySymbol.TOKEN.val());
+        }
+
+        public int index() {
+            return node.index();
         }
     }
     
@@ -142,8 +146,19 @@ public class SimpleRepairStrategy implements RepairStrategy {
                     throw new UnableHandleException();
                 }),
         EOF(
-                (node, beRepairParseList) -> node.expectingEOF(),
+                (node, beRepairParseList) -> node.expectingEOF(KeySymbol.COLON),
                 (json, node, beRepairParseList) -> KeySymbol.L_BRACE.val() + json),
+        R_BRACE_EOF(
+                (node, beRepairParseList) -> node.expectingEOF(KeySymbol.R_BRACE),
+                (json, node, beRepairParseList) -> {
+                    ParseTree errorNode = beRepairParseList.stream().filter((parse) -> parse instanceof ErrorNode).findFirst().orElse(null);
+                    if (errorNode != null && KeySymbol.R_BRACE.val().equalsIgnoreCase(errorNode.getText())) {
+                        int start = node.index();
+                        return json.substring(0, start) + json.substring(start + 1);
+                    }
+                    throw new UnableHandleException();
+                }
+        ),
         CLOSE_QUOTATION_MARK(
                 (node, beRepairParseList) -> node.expectingToken() && node.key().startsWith("\""),
                 (json, node, beRepairParseList) -> {

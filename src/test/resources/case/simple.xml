@@ -129,6 +129,10 @@
         <correct>{"f": "v", "a": [1, 2]}</correct>
     </test-case>
     <test-case>
+        <anomaly>{"f":"v"}}</anomaly>
+        <correct>{"f":"v"}</correct>
+    </test-case>
+    <test-case>
         <anomaly>
             {
                 "f1":"v1,

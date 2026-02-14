@@ -19,14 +19,14 @@
 <dependency>
     <groupId>io.github.haibiiin</groupId>
     <artifactId>json-repair</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
 Gradle 配置如下：
 
 ```
-implementation 'io.github.haibiiin:json-repair:0.3.0'
+implementation 'io.github.haibiiin:json-repair:0.4.0'
 ```
 
 接下来你只需要实例化 `JSONRepair` 并调用 `handle()` 方法便可以完成异常 JSON 的修复。
@@ -47,9 +47,9 @@ String correctJSON = repair.handle(mistakeJSON);
 
 ## 功能特性
 
-你可以通过查看 [测试用例数据集](https://github.com/HAibiiin/json-repair/blob/main/src/test/resources/case/simple.xml) 或 [测试报告](https://haibiiin.github.io/json-repair/reports/testcase/) 了解当前 0.3.0 版本 **json-repair** 支持修补的所有 JSON 异常。
+你可以通过查看 [测试用例数据集](https://github.com/HAibiiin/json-repair/blob/main/src/test/resources/case/simple.xml) 或 [测试报告](https://haibiiin.github.io/json-repair/reports/testcase/) 了解当前 0.4.0 版本 **json-repair** 支持修补的所有 JSON 异常。
 
-基于当前 0.3.0 版本的功能如下：
+基于当前 0.4.0 版本的功能如下：
 
 * 实现对 JSON 字符串基本修补功能：
   * 修补缺少的右括号；
@@ -68,24 +68,24 @@ String correctJSON = repair.handle(mistakeJSON);
 
 你可以通过运行 [BenchmarkTests](https://github.com/HAibiiin/json-repair/blob/main/src/test/java/io/github/haibiiin/json/repair/BenchmarkTests.java) 进行更多场景的性能测试
 
-基于当前 0.3.0 版本的性能测试如下：
+基于当前 0.4.0 版本的性能测试如下：
 
 ```
 --AverageTime --NANOSECONDS --Warmup-5-1-SECONDS
 Benchmark                                                          (anomalyJSON)    Mode     Cnt          Score         Error   Units
-BenchmarkTests.testSimpleRepairStrategy                      {"f":"v", "f2":"v2"    avgt       5       9077.407 ±    5268.919   ns/op
-BenchmarkTests.testSimpleRepairStrategy                         {"f":"v", "a":[1    avgt       5      21058.074 ±    2600.312   ns/op
-BenchmarkTests.testSimpleRepairStrategy  {"f":"v", "a":[1,2], "o1":{"f1":"v1"},     avgt       5      18696.069 ±    3740.596   ns/op
-BenchmarkTests.testSimpleRepairStrategy     "f":"v", "a":[1,2], "o1":{"f1":"v1"}    avgt       5      21853.925 ±     343.950   ns/op
-BenchmarkTests.testSimpleRepairStrategy                                      f:v    avgt       5      45642.245 ±   11680.611   ns/op
+BenchmarkTests.testSimpleRepairStrategy                      {"f":"v", "f2":"v2"    avgt       5     114767.597 ±  246035.480   ns/op
+BenchmarkTests.testSimpleRepairStrategy                         {"f":"v", "a":[1    avgt       5      42658.921 ±   66863.970   ns/op
+BenchmarkTests.testSimpleRepairStrategy  {"f":"v", "a":[1,2], "o1":{"f1":"v1"},     avgt       5     410883.872 ±  703643.753   ns/op
+BenchmarkTests.testSimpleRepairStrategy     "f":"v", "a":[1,2], "o1":{"f1":"v1"}    avgt       5     180096.819 ±  535679.217   ns/op
+BenchmarkTests.testSimpleRepairStrategy                                      f:v    avgt       5     252954.401 ±  908076.158   ns/op
 
 --AverageTime --MILLISECONDS --Warmup-5-1-SECONDS
 Benchmark                                                          (anomalyJSON)    Mode     Cnt          Score         Error   Units
-BenchmarkTests.testSimpleRepairStrategy                      {"f":"v", "f2":"v2"    avgt       5          0.012 ±       0.008   ms/op
-BenchmarkTests.testSimpleRepairStrategy                         {"f":"v", "a":[1    avgt       5          0.061 ±       0.112   ms/op
-BenchmarkTests.testSimpleRepairStrategy  {"f":"v", "a":[1,2], "o1":{"f1":"v1"},     avgt       5          0.037 ±       0.048   ms/op
-BenchmarkTests.testSimpleRepairStrategy     "f":"v", "a":[1,2], "o1":{"f1":"v1"}    avgt       5          0.035 ±       0.054   ms/op
-BenchmarkTests.testSimpleRepairStrategy                                      f:v    avgt       5          0.094 ±       0.151   ms/op
+BenchmarkTests.testSimpleRepairStrategy                      {"f":"v", "f2":"v2"    avgt       5          0.179 ±       0.256   ms/op
+BenchmarkTests.testSimpleRepairStrategy                         {"f":"v", "a":[1    avgt       5          0.215 ±       0.373   ms/op
+BenchmarkTests.testSimpleRepairStrategy  {"f":"v", "a":[1,2], "o1":{"f1":"v1"},     avgt       5          0.070 ±       0.152   ms/op
+BenchmarkTests.testSimpleRepairStrategy     "f":"v", "a":[1,2], "o1":{"f1":"v1"}    avgt       5          0.306 ±       0.121   ms/op
+BenchmarkTests.testSimpleRepairStrategy                                      f:v    avgt       5          0.125 ±       0.243   ms/op
 ```
 
 ## 测试覆盖

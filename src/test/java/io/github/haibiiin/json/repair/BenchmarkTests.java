@@ -50,7 +50,7 @@ public class BenchmarkTests {
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(BenchmarkTests.class.getSimpleName())
-                .result("./reports/benchmark/benchmark_0.3.0.json")
+                .result("./reports/benchmark/benchmark_0.4.0.json")
                 .resultFormat(ResultFormatType.JSON)
                 .build();
         new Runner(opt).run();

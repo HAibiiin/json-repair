@@ -26,6 +26,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.jetbrains.annotations.NotNull;
 
 public class JSONRepair {
     
@@ -66,13 +67,7 @@ public class JSONRepair {
     }
     
     public String handle(String beRepairJSON) throws RepairFailureException {
-        if (!this.properties.lineFeed()) {
-            beRepairJSON = beRepairJSON.replaceAll("\\s*[\\r\\n]+\\s*", "");
-        }
-        // Fix redundant leading quote in JSON keys. This pattern matches empty string followed by key name: ""key" and replaces it with "key"
-        beRepairJSON = beRepairJSON.replaceAll("\"\"([^\",:{}\\[\\]\\s]+)\"", "\"$1\"");
-        // Remove non-JSON characters (e.g. parentheses) appearing after structural tokens
-        beRepairJSON = beRepairJSON.replaceAll("(?<=[]},])\\s*[^\\s\\w\"{}\\[\\]:,.\\-]+\\s*(?=[]}]|$)", "");
+        beRepairJSON = preprocessJSON(beRepairJSON);
         
         CharStream charStream = CharStreams.fromString(beRepairJSON);
         JSONLexer lexer = new JSONLexer(charStream);
@@ -101,6 +96,17 @@ public class JSONRepair {
             String repairJSON = repairStrategy.repair(beRepairJSON, beRepairParseList, expecting);
             return subHandle(repairJSON, maxTryTimes, 0);
         }
+    }
+    
+    private @NotNull String preprocessJSON(String beRepairJSON) {
+        if (!this.properties.lineFeed()) {
+            beRepairJSON = beRepairJSON.replaceAll("\\s*[\\r\\n]+\\s*", "");
+        }
+        // Fix redundant leading quote in JSON keys. This pattern matches empty string followed by key name: ""key" and replaces it with "key"
+        beRepairJSON = beRepairJSON.replaceAll("\"\"([^\",:{}\\[\\]\\s]+)\"", "\"$1\"");
+        // Remove non-JSON characters (e.g. parentheses) appearing after structural tokens
+        beRepairJSON = beRepairJSON.replaceAll("(?<=[]},])\\s*[^\\s\\w\"{}\\[\\]:,.\\-]+\\s*(?=[]}]|$)", "");
+        return beRepairJSON;
     }
     
     public String subHandle(String beRepairJSON, int maxTryTimes, int tryTimes) {

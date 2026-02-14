@@ -101,7 +101,7 @@ public class SimpleRepairStrategy implements RepairStrategy {
         public boolean expectingToken() {
             return node.expectingList().size() == 1 && node.expectingList().contains(KeySymbol.TOKEN.val());
         }
-
+        
         public int index() {
             return node.index();
         }
@@ -157,8 +157,7 @@ public class SimpleRepairStrategy implements RepairStrategy {
                         return json.substring(0, start) + json.substring(start + 1);
                     }
                     throw new UnableHandleException();
-                }
-        ),
+                }),
         CLOSE_QUOTATION_MARK(
                 (node, beRepairParseList) -> node.expectingToken() && node.key().startsWith("\""),
                 (json, node, beRepairParseList) -> {

@@ -43,7 +43,7 @@ public class FixerTests {
         JSONRepair repair = new JSONRepair(config);
         Assertions.assertEquals(correct.trim(), repair.handle(anomaly).trim());
     }
-
+    
     @Disabled
     @ParameterizedTest(name = "{0} > {1}")
     @TestCaseSource(path = "/case/correct.xml", type = FixerStrategy.CORRECT)

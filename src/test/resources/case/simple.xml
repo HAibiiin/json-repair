@@ -146,4 +146,28 @@
             }
         </correct>
     </test-case>
+    <test-case>
+        <anomaly><![CDATA[
+[
+    {
+        "name": "WriteTool.write",
+        "args": {
+            "filePath": "ai-llm-ppt/index.html",
+            "content": "<div class=\"test">hello</div>"
+        }
+    }
+]
+        ]]></anomaly>
+        <correct><![CDATA[
+[
+    {
+        "name": "WriteTool.write",
+        "args": {
+            "filePath": "ai-llm-ppt/index.html",
+            "content": "<div class=\"test\">hello</div>"
+        }
+    }
+]
+        ]]></correct>
+    </test-case>
 </test-cases>

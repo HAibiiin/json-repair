@@ -106,7 +106,87 @@ public class JSONRepair {
         beRepairJSON = beRepairJSON.replaceAll("\"\"([^\",:{}\\[\\]\\s]+)\"", "\"$1\"");
         // Remove non-JSON characters (e.g. parentheses) appearing after structural tokens
         beRepairJSON = beRepairJSON.replaceAll("(?<=[]},])\\s*[^\\s\\w\"{}\\[\\]:,.\\-]+\\s*(?=[]}]|$)", "");
+        beRepairJSON = escapeUnescapedStringQuotes(beRepairJSON);
         return beRepairJSON;
+    }
+    
+    private @NotNull String escapeUnescapedStringQuotes(String json) {
+        StringBuilder repaired = new StringBuilder(json.length());
+        boolean inString = false;
+        boolean escaped = false;
+        int stringStart = -1;
+        for (int i = 0; i < json.length(); i++) {
+            char current = json.charAt(i);
+            if (!inString) {
+                repaired.append(current);
+                if (current == '"') {
+                    inString = true;
+                    escaped = false;
+                    stringStart = i;
+                }
+                continue;
+            }
+            
+            if (escaped) {
+                repaired.append(current);
+                escaped = false;
+                continue;
+            }
+            
+            if (current == '\\') {
+                repaired.append(current);
+                escaped = true;
+                continue;
+            }
+            
+            if (current == '"') {
+                if (i == stringStart + 1 || isLikelyStringClosingQuote(json, i) || isLikelyStructuralQuote(json, i)) {
+                    repaired.append(current);
+                    inString = false;
+                    stringStart = -1;
+                } else {
+                    repaired.append('\\').append(current);
+                }
+                continue;
+            }
+            
+            repaired.append(current);
+        }
+        return repaired.toString();
+    }
+    
+    private boolean isLikelyStringClosingQuote(String json, int quoteIndex) {
+        int nextIndex = nextNonWhitespaceIndex(json, quoteIndex + 1);
+        if (nextIndex == json.length()) {
+            return true;
+        }
+        char next = json.charAt(nextIndex);
+        return next == ':' || next == ',' || next == '}' || next == ']';
+    }
+    
+    private boolean isLikelyStructuralQuote(String json, int quoteIndex) {
+        int previousIndex = previousNonWhitespaceIndex(json, quoteIndex - 1);
+        if (previousIndex < 0) {
+            return true;
+        }
+        char previous = json.charAt(previousIndex);
+        return previous == ':' || previous == ',' || previous == '{' || previous == '[';
+    }
+    
+    private int previousNonWhitespaceIndex(String json, int startIndex) {
+        int index = startIndex;
+        while (index >= 0 && Character.isWhitespace(json.charAt(index))) {
+            index--;
+        }
+        return index;
+    }
+    
+    private int nextNonWhitespaceIndex(String json, int startIndex) {
+        int index = startIndex;
+        while (index < json.length() && Character.isWhitespace(json.charAt(index))) {
+            index++;
+        }
+        return index;
     }
     
     public String subHandle(String beRepairJSON, int maxTryTimes, int tryTimes) {

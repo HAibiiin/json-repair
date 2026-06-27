@@ -22,6 +22,7 @@
         <annotations.version>24.1.0</annotations.version>
 
         <antlr4-maven-plugin.version>4.8</antlr4-maven-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
 
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
@@ -87,6 +88,11 @@
                         </licenseHeader>
                     </java>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.antlr</groupId>

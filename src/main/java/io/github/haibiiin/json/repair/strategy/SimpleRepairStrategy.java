@@ -40,6 +40,14 @@ public class SimpleRepairStrategy implements RepairStrategy {
         return strategy.fixStrategy.fix(json, nodeWrapper, beRepairParseList);
     }
     
+    private static String replaceFirstLiteral(String source, String target, String replacement) {
+        int index = source.indexOf(target);
+        if (index == -1) {
+            return source;
+        }
+        return source.substring(0, index) + replacement + source.substring(index + target.length());
+    }
+    
     static class SimpleNodeWrapper {
         
         private final Expecting.Node node;
@@ -164,20 +172,20 @@ public class SimpleRepairStrategy implements RepairStrategy {
                     if (json.lastIndexOf(KeySymbol.COMMA.val()) != -1) {
                         ParseTree errorNode = beRepairParseList.stream().filter((parse) -> parse instanceof ErrorNode).findFirst().orElse(null);
                         if (errorNode != null && KeySymbol.COLON.val().equalsIgnoreCase(errorNode.getText())) {
-                            return json.replaceFirst(node.key(), node.key().substring(0, node.key().length() - 1) + "\",");
+                            return replaceFirstLiteral(json, node.key(), node.key().substring(0, node.key().length() - 1) + "\",");
                         }
                     }
-                    return json.replaceFirst(node.key(), node.key() + "\"");
+                    return replaceFirstLiteral(json, node.key(), node.key() + "\"");
                 }),
         OPEN_QUOTATION_MARK(
                 (node, beRepairParseList) -> node.expectingToken() && node.key().endsWith("\""),
-                (json, node, beRepairParseList) -> json.replaceFirst(node.key(), "\"" + node.key())),
+                (json, node, beRepairParseList) -> replaceFirstLiteral(json, node.key(), "\"" + node.key())),
         STRING_QUOTATION_MARK(
                 (node, beRepairParseList) -> node.expectingToken() && node.key().endsWith(KeySymbol.COLON.val()),
-                (json, node, beRepairParseList) -> json.replaceFirst(node.key(), "\"" + node.key().substring(0, node.key().length() - 1) + "\":")),
+                (json, node, beRepairParseList) -> replaceFirstLiteral(json, node.key(), "\"" + node.key().substring(0, node.key().length() - 1) + "\":")),
         VALUE_QUOTATION_MARK(
                 (node, beRepairParseList) -> node.expectingToken(),
-                (json, node, beRepairParseList) -> json.replaceFirst(node.key(), "\"" + node.key() + "\"")),
+                (json, node, beRepairParseList) -> replaceFirstLiteral(json, node.key(), "\"" + node.key() + "\"")),
         CLOSE_BRACE(
                 (node, beRepairParseList) -> beRepairParseList.stream().anyMatch(
                         (parse) -> parse instanceof ErrorNode
